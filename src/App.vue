@@ -6,7 +6,7 @@
   #app
     //- audio(preload="auto",autoplay,  , loop, id="bgm")
     //-   source(src='./assets/sound/bgm2.ogg', type='audio/mp3')
-    .version 0.0.1
+    .version 0.0.2
     .logo
       .icon(:style="{backgroundColor: nowbgColor, backgroundImage:`url(${require('./assets/logo/' + this.nowImage)})` }")
       .space
