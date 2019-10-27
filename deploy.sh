@@ -4,10 +4,10 @@ set -e
 # 打包
 npm run build
 
-git add .
+# git add .
 git commit -m 'update'
-git push -u origin master
-# 移動至到打包後的dist目錄 
+# git push -u origin master
+# # 移動至到打包後的dist目錄 
 cd dist
 git checkout gh-pages
 git add -f dist
