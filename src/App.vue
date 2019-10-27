@@ -4,13 +4,16 @@
   //-   <HelloWorld msg="Welcome to Your Vue.js App"/>
   //- </div> -->
   #app
+    //- audio(preload="auto",autoplay,  , loop, id="bgm")
+    //-   source(src='./assets/sound/bgm2.ogg', type='audio/mp3')
+
     .logo
       .icon(:style="{backgroundColor: nowbgColor, backgroundImage:`url(${require('./assets/logo/' + this.nowImage)})` }")
       .space
       .font(:style="{backgroundImage:`url(${require('./assets/font/' + this.nowFont)})` }")
     .tab
       .colorPick.pick
-        .pickColor.picker(v-for="(color, index) in bgcolor" :style="{backgroundColor: color}" @click="changeBgColor(index, color, $event)" :class="{isActive: bgSelect[index]}")
+        .pickColor.picker(v-for="(color, index) in bgcolor" :style="{backgroundColor: color}" @click="changeBgColor(index, color)" :class="{isActive: bgSelect[index]}")
       .facePick.pick
         .pickFace.picker(v-for="(item, index) in image" @click="changeImage(index, item)" :style="{backgroundImage:`url(${require('./assets/logo/' + item)})` }" :class="{isActive: imageSelect[index]}")
       .fontPick.pick
@@ -40,15 +43,43 @@ export default {
       bgSelect: [true, false, false, false],
       imageSelect: [true, false, false, false],
       fontSelect: [true, false, false, false],
-
+      clickSound: null
     };
   },
+  mounted(){
+    // var audio = document.getElementById("bgm")
+    // audio.volume = 0.5
+    var source = document.createElement("source");
+    source.src = require('./assets/sound/click.mp3');
+    this.clickSound = document.createElement("audio");
+    this.clickSound.setAttribute("preload", "auto");
+    this.clickSound.style.display = "none";
+    this.clickSound.volume = 0.3;
+    this.clickSound.appendChild(source);
+    document.body.appendChild(this.clickSound);
+
+},
   computed: {
 
   },
   methods: {
-    changeBgColor(index, color, event) {
-      console.log(event);
+    playSound(){
+      /*eslint no-console: "error"*/
+
+      this.clickSound.currentTime=0;
+      var playpromise = this.clickSound.play()
+      if (playpromise !== undefined) {
+          playpromise.then(() => {
+              this.clickSound.play()
+          }).catch(error => {
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+              console.error(error, "error");
+          });
+      }
+    },
+    changeBgColor(index, color) {
+      if(index != this.nowIndex[0])
+        this.playSound()
       for(var i=0;i < this.bgSelect.length; i++){
         this.bgSelect[i] = false
       }
@@ -56,7 +87,19 @@ export default {
       this.nowIndex[0] = index
       this.nowbgColor = color;
     },
+    changeImage(index, image) {
+     if(index != this.nowIndex[1])
+        this.playSound()
+      for(var i=0;i < this.imageSelect.length; i++){
+        this.imageSelect[i] = false
+      }
+      this.imageSelect[index] = true
+      this.nowIndex[1] = index
+      this.nowImage = image;
+    },
     chnageFont(index,d, font) {
+      if(index != this.nowIndex[2])
+        this.playSound()
       for(var i=0;i < this.fontSelect.length; i++){
         this.fontSelect[i] = false
       }
@@ -68,14 +111,6 @@ export default {
         this.nowFont = this.fontD[index];
         this.nowIndex[3] = index
       }
-    },
-    changeImage(index, image) {
-      for(var i=0;i < this.imageSelect.length; i++){
-        this.imageSelect[i] = false
-      }
-      this.imageSelect[index] = true
-      this.nowIndex[1] = index
-      this.nowImage = image;
     },
 
   }
@@ -90,11 +125,13 @@ export default {
     height: 15rem !important
   .pick 
     flex-direction: column
-    margin-right: 2rem !important
+    margin:0 1.3rem !important
   .picker
     width: 3rem !important
     height: 15rem
 
+  .logo
+    margin-bottom: 60% !important
   
   
   .icon
@@ -146,7 +183,8 @@ html, body
   margin-bottom: 10%
   display: flex
   width: auto
-
+  background-color:  rgba(255, 255, 255, 0.8)
+  border-radius: 10px
 .space
   width: 0px
 
