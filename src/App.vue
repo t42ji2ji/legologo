@@ -6,7 +6,7 @@
   #app
     //- audio(preload="auto",autoplay,  , loop, id="bgm")
     //-   source(src='./assets/sound/bgm2.ogg', type='audio/mp3')
-
+    .version 0.0.1
     .logo
       .icon(:style="{backgroundColor: nowbgColor, backgroundImage:`url(${require('./assets/logo/' + this.nowImage)})` }")
       .space
@@ -231,6 +231,12 @@ html, body
 .isActive
   outline: dashed 2.5px
 
+.version
+  position: absolute
+  bottom: 2px
+  right: 1px
+  font-weight: bold
+  opacity: .5
 
 
 
